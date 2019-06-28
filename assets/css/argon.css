@@ -15062,6 +15062,7 @@ button.bg-lighter:focus
 .bg-gradient-primary
 {
     background: linear-gradient(87deg, #FD7013 0, #EB7D6F 100%) !important;
+    opacity: 0.8;
 }
 
 .bg-gradient-secondary
@@ -18934,21 +18935,23 @@ textarea[resize='horizontal']
     padding: .75rem 1rem;
 
     transition: all .15s ease; 
+border: solid 2px rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.7);
 
-    color: #5e72e4;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+    box-shadow: 0 4px 6px rgba(50, 50, 93, .05), 0 1px 3px rgba(0, 0, 0, .02);
 }
 .nav-pills .nav-link:hover
 {
-    color: #485fe0;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
 }
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link
 {
-    color: #fff;
-    background-color: #5e72e4;
+    color: orangered;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
 }
 
 @media (max-width: 575.98px)
@@ -21902,4 +21905,20 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 	position:relative;
 	top:0; 
     
+}
+
+.counter-main{
+    min-height: 400px;
+}
+@media (min-width: 768px){
+    .counter-main{
+    height: 200px;
+}
+}
+.o3{
+   transform: scale(1);
+}
+
+.o3.active{
+    transform: scaleY(1.1);
 }

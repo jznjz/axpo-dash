@@ -960,6 +960,7 @@ var OrdersChart = (function() {
 						}
 					}
 				}
+                
 			},
 			data: {
 				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
