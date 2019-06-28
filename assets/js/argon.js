@@ -1111,6 +1111,14 @@ var myBarChart = new Chart(ctx, {
           min: 0,
         }
       }]
-    }
+    },
+    plugins: {
+            // Change options for ALL labels of THIS CHART
+            datalabels: {
+                color: '#111',
+                anchor: 'end',
+                offset: 'bottom',
+            }
+        }
   }
 });
