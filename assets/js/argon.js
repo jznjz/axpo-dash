@@ -19,6 +19,14 @@
 //
 // Bootstrap Datepicker
 //
+Chart.plugins.register({
+  id: 'paddingBelowLegends',
+  beforeInit: function(chart, options) {
+    chart.legend.afterFit = function() {
+      this.height = this.height + 30;
+    };
+  }
+});
 
 'use strict';
 
@@ -555,8 +563,8 @@ var Charts = (function() {
 				global: {
 					responsive: true,
 					maintainAspectRatio: false,
-					defaultColor: (mode == 'dark') ? colors.gray[700] : colors.gray[600],
-					defaultFontColor: (mode == 'dark') ? colors.gray[700] : colors.gray[600],
+					defaultColor: (mode == 'dark') ? colors.gray[400] : colors.gray[400] ,
+					defaultFontColor: (mode == 'dark') ? colors.gray[400]  : colors.gray[400] ,
 					defaultFontFamily: fonts.base,
 					defaultFontSize: 13,
 					layout: {
@@ -567,7 +575,7 @@ var Charts = (function() {
 						position: 'bottom',
 						labels: {
 							usePointStyle: true,
-							padding: 16
+							padding: 30
 						}
 					},
 					elements: {
@@ -580,7 +588,7 @@ var Charts = (function() {
 							borderWidth: 4,
 							borderColor: colors.theme['primary'],
 							backgroundColor: colors.transparent,
-							borderCapStyle: 'rounded'
+							borderCapStyle: 'square'
 						},
 						rectangle: {
 							backgroundColor: colors.theme['warning']
@@ -589,7 +597,7 @@ var Charts = (function() {
 							backgroundColor: colors.theme['primary'],
 							borderColor: (mode == 'dark') ? colors.gray[800] : colors.white,
 							borderWidth: 4
-						}
+						},
 					},
 					tooltips: {
 						enabled: false,
@@ -685,7 +693,7 @@ var Charts = (function() {
 					}
 				},
 				doughnut: {
-					cutoutPercentage: 83,
+					cutoutPercentage: 53,
 					tooltips: {
 						callbacks: {
 							title: function(item, data) {
@@ -755,7 +763,7 @@ var Charts = (function() {
 			ticks: {
 				padding: 20
 			},
-			maxBarThickness: 30
+			maxBarThickness: 50
 		});
 
 		return options;
@@ -910,79 +918,64 @@ var Charts = (function() {
 // Orders chart
 //
 
-var OrdersChart = (function() {
+var canvasP = document.getElementById("chart-orders");
+var ctxP = canvasP.getContext('2d');
+var myPieChart = new Chart(ctxP, {
+   type: 'doughnut',
+   data: {
+      labels: ["0-20", "20-30", "30-40", "40+"],
+      datasets: [{
+         data: [10, 50, 13, 20],
+         backgroundColor: ["#393E46", "#6B6E74", "#9C9FA3", "#CDCED0"],
+         hoverBackgroundColor: ["#FD7013", "#FD7013", "#FD7013", "#FD7013"]
+      }]
+   },
+   options: {
+      legend: {
+                      labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'black'
+            },
+         display: true,
+         position: "top"
+      },
+       data:{
+         fontColor: 'rgba(255,255,255, 1)',
+                        fontSize: 18  
+       },
+      cutoutPercentage: 50,
+   }
+});
 
-	//
-	// Variables
-	//
+canvasP.onclick = function(e) {
+   var slice = myPieChart.getElementAtEvent(e);
+   if (!slice.length) return; // return if not clicked on slice
+   var label = slice[0]._model.label;
+   switch (label) {
+      // add case for each label/slice
+      case '0-20':
+        
+         updatechart();  
+           
+         break;
+      case '20-30':
+        updatechart2();  
+         break;
+      // add rests ...
+   }
+}
 
-	var $chart = $('#chart-orders');
-	var $ordersSelect = $('[name="ordersSelect"]');
+function updatechart(){
+    myBarChart.data.datasets[0].data = [1, 2];
+    myBarChart.data.datasets[1].data = [4, 5];
+    myBarChart.update();  
+}
 
-
-	//
-	// Methods
-	//
-
-	// Init chart
-	function initChart($chart) {
-
-		// Create chart
-		var ordersChart = new Chart($chart, {
-			type: 'bar',
-			options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							callback: function(value) {
-								if (!(value % 10)) {
-									//return '$' + value + 'k'
-									return value
-								}
-							}
-						}
-					}]
-				},
-				tooltips: {
-					callbacks: {
-						label: function(item, data) {
-							var label = data.datasets[item.datasetIndex].label || '';
-							var yLabel = item.yLabel;
-							var content = '';
-
-							if (data.datasets.length > 1) {
-								content += '<span class="popover-body-label mr-auto">' + label + '</span>';
-							}
-
-							content += '<span class="popover-body-value">' + yLabel + '</span>';
-							
-							return content;
-						}
-					}
-				}
-                
-			},
-			data: {
-				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-				datasets: [{
-					label: 'Sales',
-					data: [25, 20, 30, 22, 17, 29]
-				}]
-			}
-		});
-
-		// Save to jQuery object
-		$chart.data('chart', ordersChart);
-	}
-
-
-	// Init chart
-	if ($chart.length) {
-		initChart($chart);
-	}
-
-})();
-
+function updatechart2(){
+    myBarChart.data.datasets[0].data = [11, 12];
+    myBarChart.data.datasets[1].data = [14, 15];
+    myBarChart.update();  
+}
 //
 // Charts
 //
@@ -1011,6 +1004,9 @@ gradient1.addColorStop(1, 'rgba(255,255,255, 0)');
 		var salesChart = new Chart($chart, {
 			type: 'line',
 			options: {
+                plugins: {
+      paddingBelowLegends: false
+    },
                 legend: {
                     labels: {
                         fontColor: 'rgba(255,255,255, 0.7)',
@@ -1081,38 +1077,49 @@ gradient1.addColorStop(1, 'rgba(255,255,255, 0)');
 
 })();
 
-var ctx = document.getElementById("chart2").getContext("2d");
+var chart2 = document.getElementById("chart2").getContext("2d");
 
-var data = {
-  labels: ["Chocolate", "Vanilla", "Strawberry"],
-  datasets: [{
-    label: "Blue",
-    backgroundColor: "orange",
-    data: [3, 7, 4]
-  }, {
-    label: "Red",
-    backgroundColor: "red",
-    data: [4, 3, 5]
-  }, {
-    label: "Green",
-    backgroundColor: "grey",
-    data: [7, 2, 6]
-  }]
-};
-
-var myBarChart = new Chart(ctx, {
+var myBarChart = new Chart(chart2, {
   type: 'bar',
-  data: data,
+  data: {
+  labels: ["喜欢", "不喜欢",],
+  datasets: [{
+    label: "男",
+    backgroundColor: "#393E46",
+    data: [3, 7]
+  }, {
+    label: "女",
+    backgroundColor: "#FD7013",
+    data: [4, 3]
+  }]
+},
+    
+    
   options: {
-    barValueSpacing: 20,
+      legend: {
+          
+          labels: {
+                        fontColor: 'rgba(#333)',
+                        fontSize: 14
+                    },
+         display: true,
+         position: "top"
+      },
+    barValueSpacing: 10,
     scales: {
+        
       yAxes: [{
         ticks: {
           min: 0,
         }
-      }]
+      }],
+        xAxes: [{
+            categoryPercentage: 0.35,
+            barPercentage: 1.0
+        }]
     },
     plugins: {
+        
             // Change options for ALL labels of THIS CHART
             datalabels: {
                 color: '#111',

@@ -10607,6 +10607,13 @@ button.bg-darker:focus
 {
     padding-bottom: 8rem !important;
 }
+@media (min-width: 576px){
+    .pb-8,
+.py-8
+{
+    padding-bottom: 4rem !important;
+}
+}
 
 .pl-8,
 .px-8
@@ -21920,5 +21927,5 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 }
 
 .o3.active{
-    transform: scaleY(1.1);
+   
 }
